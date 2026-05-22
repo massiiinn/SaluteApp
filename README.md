@@ -1,92 +1,92 @@
-# 🏥 Salute — Sistema de Gestión de Citas Médicas
+# 🏥 Salute — Sistema de Gestió de Cites Mèdiques
 
-Proyecto de fin de grado (TFG) del ciclo **Desarrollo de Aplicaciones Web (DAW)**.
+Projecte de fi de grau (TFG) del cicle **Desenvolupament d'Aplicacions Web (DAW)**.
 
-Salute es una plataforma web completa para la gestión de citas médicas con asistente conversacional inteligente, notificaciones automáticas por email y sistema de roles diferenciado.
+Salute és una plataforma web completa per a la gestió de cites mèdiques amb assistent conversacional intel·ligent, notificacions automàtiques per correu electrònic i sistema de rols diferenciat.
 
-🌐 **Producción:** [http://grup11.infla.cat](http://grup11.infla.cat)
+🌐 **Producció:** [http://grup11.infla.cat](http://grup11.infla.cat)
 
 ---
 
-## 🛠️ Stack tecnológico
+## 🛠️ Stack tecnològic
 
-| Capa | Tecnología |
+| Capa | Tecnologia |
 |------|-----------|
 | Frontend | Angular 17+ (standalone components) |
 | Backend | Symfony 7 + PHP 8.4 |
-| Base de datos | MySQL 8.0 |
-| Autenticación | JWT (LexikJWTAuthenticationBundle) |
+| Base de dades | MySQL 8.0 |
+| Autenticació | JWT (LexikJWTAuthenticationBundle) |
 | IA | Groq API (Llama 3.3-70b / Llama 3.1-8b) |
-| Email | Gmail SMTP / Mailpit (desarrollo) |
-| Contenedores | Docker + Docker Compose |
-| Producción | Kubernetes (clúster grup11) |
+| Correu | Gmail SMTP / Mailpit (desenvolupament) |
+| Contenidors | Docker + Docker Compose |
+| Producció | Kubernetes (clúster grup11) |
 
 ---
 
-## 📋 Requisitos previos
+## 📋 Requisits previs
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-- [Node.js 18+](https://nodejs.org/) y npm
+- [Node.js 18+](https://nodejs.org/) i npm
 - [Angular CLI](https://angular.io/cli): `npm install -g @angular/cli`
 
 ---
 
-## 🚀 Instalación y puesta en marcha (local)
+## 🚀 Instal·lació i posada en marxa (local)
 
-### 1. Clonar el repositorio
+### 1. Clonar el repositori
 
 ```bash
-git clone <url-del-repositorio>
-cd salute-app
+git clone https://github.com/massiiinn/SaluteApp.git
+cd SaluteApp
 ```
 
-### 2. Configurar variables de entorno
+### 2. Configurar variables d'entorn
 
-Edita `salute-backend/.env` y configura:
+Edita `salute-backend/.env` i configura:
 
 ```env
 DATABASE_URL="mysql://salute_user:salute_pass@mysql:3306/salute_db?serverVersion=8.0&charset=utf8mb4"
-MAILER_DSN=gmail://TU_EMAIL%40gmail.com:TU_APP_PASSWORD@default
-GROQ_API_KEY=tu_api_key_de_groq
+MAILER_DSN=gmail://EL_TEU_EMAIL%40gmail.com:EL_TEU_APP_PASSWORD@default
+GROQ_API_KEY=la_teva_api_key_de_groq
 JWT_PASSPHRASE=salute_jwt_secret
 ```
 
-> Para obtener una App Password de Gmail: Cuenta Google → Seguridad → Verificación en dos pasos → Contraseñas de aplicaciones.
+> Per obtenir una App Password de Gmail: Compte Google → Seguretat → Verificació en dos passos → Contrasenyes d'aplicació.
 >
-> Para obtener una API Key de Groq: [console.groq.com](https://console.groq.com)
+> Per obtenir una API Key de Groq: [console.groq.com](https://console.groq.com)
 
-### 3. Arrancar el backend con Docker
+### 3. Arrancar el backend amb Docker
 
 ```bash
 docker compose up -d --build
 ```
 
-Esto levanta 4 contenedores:
+Això aixeca 4 contenidors:
 - `salute_php` — PHP 8.4 FPM + Symfony
-- `salute_nginx` — Nginx (puerto 8080)
-- `salute_mysql` — MySQL 8.0 (puerto 3306)
-- `salute_mailpit` — Servidor de email local (puerto 8025)
+- `salute_nginx` — Nginx (port 8080)
+- `salute_mysql` — MySQL 8.0 (port 3306)
+- `salute_mailpit` — Servidor de correu local (port 8025)
 
-### 4. Instalar dependencias PHP
+### 4. Instal·lar dependències PHP
 
 ```bash
 docker exec salute_php composer install
 ```
 
-### 5. Generar claves JWT
+### 5. Generar claus JWT
 
 ```bash
 docker exec salute_php php bin/console lexik:jwt:generate-keypair
 ```
 
-### 6. Crear la base de datos y ejecutar migraciones
+### 6. Crear la base de dades i executar migracions
 
 ```bash
 docker exec salute_php php bin/console doctrine:database:create --if-not-exists
 docker exec salute_php php bin/console doctrine:migrations:migrate --no-interaction
 ```
 
-### 7. Cargar datos de prueba (fixtures)
+### 7. Carregar dades de prova (fixtures)
 
 ```bash
 docker exec salute_php php bin/console doctrine:fixtures:load --no-interaction
@@ -100,18 +100,18 @@ npm install
 ng serve
 ```
 
-La aplicación estará disponible en [http://localhost:4200](http://localhost:4200)
+L'aplicació estarà disponible a [http://localhost:4200](http://localhost:4200)
 
 ---
 
-## ☸️ Despliegue en producción (Kubernetes)
+## ☸️ Desplegament en producció (Kubernetes)
 
-La aplicación está desplegada en un clúster Kubernetes en el namespace `grup11`.
+L'aplicació està desplegada en un clúster Kubernetes al namespace `grup11`.
 
-### Imágenes Docker
+### Imatges Docker
 
 ```bash
-# Construir y subir imágenes a Harbor
+# Construir i pujar imatges a Harbor
 docker build -t kube0.lacetania.cat/grup11/salute-php:1.0 ./salute-backend/
 docker push kube0.lacetania.cat/grup11/salute-php:1.0
 
@@ -128,98 +128,98 @@ docker push kube0.lacetania.cat/grup11/salute-nginx:1.0
 kubectl apply -f k8s/
 ```
 
-### Actualizar el frontend en producción
+### Actualitzar el frontend en producció
 
 ```bash
 # 1. Compilar en local
 cd salute-frontend
 ng build --configuration production
 
-# 2. Subir al servidor
+# 2. Pujar al servidor
 scp -r dist/ grup11@infla.cat:~/salute-app/salute-frontend/
 
 # 3. Copiar al pod Nginx
 kubectl cp ~/salute-app/salute-frontend/dist/salute-frontend/browser/. <pod-nginx>:/usr/share/nginx/html/
 ```
 
-### Actualizar el backend en producción
+### Actualitzar el backend en producció
 
 ```bash
-# Copiar código al pod PHP
+# Copiar codi al pod PHP
 kubectl cp ~/salute-app/salute-backend/. <pod-php>:/var/www/html/
 
-# Arreglar permisos y limpiar caché
+# Arreglar permisos i netejar caché
 kubectl exec -it <pod-php> -- chmod -R 755 /var/www/html/vendor/
 kubectl exec -it <pod-php> -- php bin/console cache:clear
 ```
 
 ---
 
-## 👥 Credenciales de prueba
+## 👥 Credencials de prova
 
-| Rol | Email | Contraseña |
+| Rol | Email | Contrasenya |
 |-----|-------|-----------|
 | Administrador | admin@salute.com | admin123 |
-| Médico | carlos@salute.com | doctor123 |
-| Paciente | juan@email.com | patient123 |
+| Metge | carlos@salute.com | doctor123 |
+| Pacient | juan@email.com | patient123 |
 
 ---
 
-## ✨ Funcionalidades principales
+## ✨ Funcionalitats principals
 
-### Gestión de citas
-- Crear, editar, cancelar y eliminar citas médicas
-- Validación de horarios — no se pueden solapar citas del mismo médico (±30 min)
-- Filtros y ordenación por columnas
-- Expiración automática de citas pasadas (cron)
+### Gestió de cites
+- Crear, editar, cancel·lar i eliminar cites mèdiques
+- Validació d'horaris — no es poden solapar cites del mateix metge (±30 min)
+- Filtres i ordenació per columnes
+- Expiració automàtica de cites passades (cron)
 
-### Asistente conversacional IA
-- Chat flotante integrado en toda la aplicación
-- Crear nueva cita con lenguaje natural
-- Cancelar una cita existente
-- Reprogramar a otra fecha/hora
-- Cambiar el médico de una cita
-- Consultar citas actuales
+### Assistent conversacional IA
+- Xat flotant integrat a tota l'aplicació
+- Crear nova cita amb llenguatge natural
+- Cancel·lar una cita existent
+- Reprogramar a una altra data/hora
+- Canviar el metge d'una cita
+- Consultar cites actuals
 
-### Sugerencia de especialidad
-- El paciente describe sus síntomas
-- La IA recomienda la especialidad adecuada
-- Selección automática del médico correspondiente
+### Suggeriment d'especialitat
+- El pacient descriu els seus símptomes
+- La IA recomana l'especialitat adequada
+- Selecció automàtica del metge corresponent
 
-### Notificaciones por email
-| Evento | Asunto |
+### Notificacions per correu
+| Esdeveniment | Assumpte |
 |--------|--------|
 | Crear cita | ✅ Cita confirmada |
-| Cancelar cita | ❌ Cita cancelada |
+| Cancel·lar cita | ❌ Cita cancel·lada |
 | Reprogramar cita | 📅 Cita reprogramada |
-| Cambiar médico | 👨‍⚕️ Médico actualizado |
-| Recordatorio 24h antes | ⏰ Recordatorio de cita |
-| Recuperar contraseña | 🔐 Restablecer contraseña |
+| Canviar metge | 👨‍⚕️ Metge actualitzat |
+| Recordatori 24h abans | ⏰ Recordatori de cita |
+| Recuperació de contrasenya | 🔐 Restablir contrasenya |
 
-### Sistema de roles
-| Funcionalidad | Paciente | Médico | Admin |
+### Sistema de rols
+| Funcionalitat | Pacient | Metge | Admin |
 |---------------|----------|--------|-------|
-| Ver sus citas | ✅ | ✅ | ✅ |
-| Crear citas | ✅ | ✅ | ✅ |
-| Editar citas | ❌ | ✅ | ✅ |
-| Gestionar médicos | ❌ | ❌ | ✅ |
-| Gestionar pacientes | ❌ | ❌ | ✅ |
-| Gestionar especialidades | ❌ | ❌ | ✅ |
+| Veure cites | ✅ | ✅ | ✅ |
+| Crear cites | ✅ | ✅ | ✅ |
+| Editar cites | ❌ | ✅ | ✅ |
+| Gestionar metges | ❌ | ❌ | ✅ |
+| Gestionar pacients | ❌ | ❌ | ✅ |
+| Gestionar especialitats | ❌ | ❌ | ✅ |
 
-### Otras funcionalidades
-- Modo oscuro con persistencia
-- Perfil de usuario con avatar personalizable
-- Recuperación de contraseña por email
-- Calendario interactivo en el dashboard
+### Altres funcionalitats
+- Mode fosc amb persistència
+- Perfil d'usuari amb avatar personalitzable
+- Recuperació de contrasenya per correu
+- Calendari interactiu al dashboard
 - Landing page explicativa
-- Diseño responsive
+- Disseny responsive
 
 ---
 
-## 🗂️ Estructura del proyecto
+## 🗂️ Estructura del projecte
 
 ```
-salute-app/
+SaluteApp/
 ├── salute-backend/          # Symfony 7
 │   ├── src/
 │   │   ├── Controller/
@@ -227,7 +227,7 @@ salute-app/
 │   │   ├── Repository/
 │   │   ├── Command/         # SendRemindersCommand, ExpireAppointmentsCommand
 │   │   └── DataFixtures/
-│   ├── templates/emails/    # Plantillas de email (Twig)
+│   ├── templates/emails/    # Plantilles de correu (Twig)
 │   ├── config/
 │   └── Dockerfile
 ├── salute-frontend/         # Angular 17
@@ -249,42 +249,42 @@ salute-app/
 
 ---
 
-## 🔧 Comandos útiles
+## 🔧 Comandes útils
 
 ```bash
-# Ver logs del backend
+# Veure logs del backend
 docker logs salute_php -f
 
-# Ejecutar migraciones
+# Executar migracions
 docker exec salute_php php bin/console doctrine:migrations:migrate --no-interaction
 
-# Limpiar caché Symfony
+# Netejar caché Symfony
 docker exec salute_php php bin/console cache:clear
 
-# Probar envío de recordatorios manualmente
+# Provar enviament de recordatoris manualment
 docker exec salute_php php bin/console app:send-reminders
 
-# Expirar citas pasadas manualmente
+# Expirar cites passades manualment
 docker exec salute_php php bin/console app:expire-appointments
 
-# Ver emails de desarrollo (Mailpit)
+# Veure correus de desenvolupament (Mailpit)
 open http://localhost:8025
 ```
 
 ---
 
-## 📧 Cron jobs
+## 📧 Tasques automàtiques (Cron)
 
-El contenedor PHP ejecuta dos tareas automáticas cada hora:
+El contenidor PHP executa dues tasques automàtiques cada hora:
 
-- `app:send-reminders` — Envía recordatorios a pacientes con cita en las próximas 24 horas
-- `app:expire-appointments` — Marca como completadas las citas cuya fecha ya ha pasado
+- `app:send-reminders` — Envia recordatoris als pacients amb cita en les pròximes 24 hores
+- `app:expire-appointments` — Marca com a completades les cites la data de les quals ja ha passat
 
 ---
 
-## 📝 Notas de desarrollo
+## 📝 Notes de desenvolupament
 
-- Los emails en desarrollo se capturan en **Mailpit** (`http://localhost:8025`) y no se envían realmente
-- Para usar Gmail real, configurar `MAILER_DSN` con una App Password de Google
-- La API de Groq tiene un plan gratuito suficiente para desarrollo y demo
-- El frontend se conecta al backend en `http://localhost:8080`
+- Els correus en desenvolupament es capturen a **Mailpit** (`http://localhost:8025`) i no s'envien realment
+- Per usar Gmail real, configurar `MAILER_DSN` amb una App Password de Google
+- L'API de Groq té un pla gratuït suficient per al desenvolupament i la demo
+- El frontend es connecta al backend a `http://localhost:8080`
