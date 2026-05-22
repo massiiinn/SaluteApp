@@ -1,6 +1,6 @@
 # 🏥 Salute — Sistema de Gestió de Cites Mèdiques
 
-Projecte de fi de grau (TFG) del cicle **Desenvolupament d'Aplicacions Web (DAW)**.
+Projecte de Síntesi de **Desenvolupament d'Aplicacions Web (DAW)**.
 
 Salute és una plataforma web completa per a la gestió de cites mèdiques amb assistent conversacional intel·ligent, notificacions automàtiques per correu electrònic i sistema de rols diferenciat.
 
